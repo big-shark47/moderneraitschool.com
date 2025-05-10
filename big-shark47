@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Portal Login</title>
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+
+  <script>
+    // Initialize EmailJS
+    window.onload = function () {
+      emailjs.init("YOUR_PUBLIC_KEY"); // ← Replace with your actual public key from EmailJS
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Student Portal Login</h2>
+    <form id="loginForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Simulate a login
+      const username = document.getElementById("username").value;
+      const loginTime = new Date().toLocaleString();
+
+      // Get IP address
+      fetch("https://api.ipify.org?format=json")
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip;
+
+          // Send alert email with EmailJS
+          emailjs.send("service_03p5q1b", "template_xtw8s7y", {
+            username: username,
+            time: loginTime,
+            ip: ip
+          })
+          .then(response => {
+            alert("Login successful. Notification sent!");
+          })
+          .catch(error => {
+            console.error("Failed to send email:", error);
+            alert("Login successful, but email notification failed.");
+          });
+        });
+    });
+  </script>
+</body>
+</html>
